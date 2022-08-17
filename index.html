@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue Basics</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Vue Course Goals</h1>
+    </header>
+    <section id="user-goals">
+      <p>Search your strings here!</p>
+       <input type="text" v-model="searchString">
+      <h2>My course goals</h2>
+      <input type="text" v-model="inputTask"/>
+      <button  @click="addTask">Add Goal</button>
+      <select name="sortBy" id="select" v-model="sortBy">
+        <option value="name">name</option>
+        <option value="status">status</option>
+      </select>
+      <p style="font-weight: 600; color:brown">Todos After Filter</p>
+      <ul>
+        <p v-if="showMessege" style="color: red;">input can't be null</p>
+        <li v-for="(todo,index) in filterItems" :key="todo" style="display: flex; justify-content:space-between"> 
+          <input type="checkbox" v-model="todo.isComplete"> 
+          <span>{{todo.name}}</span>
+          <span style="display: flex;">Status = {{todo.isComplete}} <div v-show="todo.isComplete === false" style="height: 15px; width:15px; background-color:red; border-radius:100%"></div>
+            <div v-show="todo.isComplete === true" style="height: 15px; width:15px; background-color:green; border-radius:100%"></div>
+          </span>
+          <div  @click="deleteTask(index)" style="color: white; height:20px; width: 20px; border-radius: 100%; background-color: brown; text-align: center;display: flex; justify-content:center;align-items: center; cursor: pointer;">x</div>
+        </li>
+       
+      
+      </ul>
+
+      <!-- pagination -->
+      <div v-if="totalPages > 0" >
+        <span v-if="showPreviousLink" v-on:click="updatePage(currentPage - 1)" style="cursor: pointer; color: black; font-weight: 600;"> < </span>
+        {{currentPage + 1}} of {{ totalPages }}
+        <span v-if="showNextLink" v-on:click="updatePage(currentPage + 1)" style="cursor: pointer; color: black; font-weight: 600;"> > </span>
+
+      </div>
+      <p style="font-weight: 600; color:brown">Todos with true status</p>
+      {{sortedVisibleTodos}}
+      <ul v-if="afterFilter.length != 0">
+        <li v-for="todo in afterFilter" :key="todo" style="display: flex; column-gap: 20px; justify-content: space-around;">
+         <span> {{todo.name}}</span>
+          <span>{{todo.isComplete}}</span>
+        </li>
+      </ul>
+    </section>
+  </body>
+</html>
